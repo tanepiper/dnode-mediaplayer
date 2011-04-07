@@ -36,16 +36,23 @@ app.get '/', (req, res, next) ->
         ###
 
 app.get '/play/:file', (req, res, next) ->
-    filePath = path.join __dirname, 'music', 'tyrian', req.param 'file'
+    filePath = path.join __dirname, 'music', 'totala', req.param 'file'
     stat = fs.statSync filePath
     
     res.header 'content-type', 'audio/ogg'
     res.header 'content-length', stat.size
-    res.sendfile filePath
+    
+    readStream = fs.createReadStream filePath
+
+    #readStream.on 'data', () ->
+        #console.log 'data'
+        #console.log arguments
+    
+    util.pump readStream, res
     
     
 app.get '/show-image/:file', (req, res, next) ->
-    filePath = path.join __dirname, 'music', 'tyrian', req.param 'file'
+    filePath = path.join __dirname, 'music', 'totala', req.param 'file'
     stat = fs.statSync filePath
     
     res.header 'content-type', 'audio/ogg'

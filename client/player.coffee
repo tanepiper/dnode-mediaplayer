@@ -9,8 +9,11 @@ class window.Player extends process.EventEmitter
         @image = if playlist.image then playlist.image or null
         @audio_files = playlist.audio_files
         
+        @player = jQuery(player_elem).get()[0]
+        
         #jQuery(@playerWidget()).insertAfter player_elem
         
+        ###
         @player = jQuery(player_elem).jPlayer
             swfPath: "/jplayer",
             supplied: "oga"
@@ -27,11 +30,15 @@ class window.Player extends process.EventEmitter
                 jQuery('#' + me.current_playing).css('background-color': 'yellow')
                 $(this).jPlayer 'play'
             
-                    
+        ###         
         @canvas = jQuery(canvas_elem).get()[0]
         @c_context = @canvas.getContext '2d'
         
-        
+        ###
+        @player.on 'MozAudioAvailable', () ->
+            console.log arguments
+        , false
+        ###
         
         
     playerWidget: () ->
@@ -74,11 +81,10 @@ class window.Player extends process.EventEmitter
             @attachHandler link
             
             item = $('<li></li>').append link
-            jQuery('.jp-playlist ul').append item
-        
-        
-        @player.jPlayer 'setMedia',
-            oga: @audio_files[0].path
+            jQuery('#playlist ul').append item
+            
+        jQuery(@player).append "<source src=\"#{@audio_files[@current_playing].path}\" />";
+        jQuery('#' + @current_playing).css('background-color': 'yellow')
                 
     attachHandler: (link) ->
         id = parseInt link.attr('id'), 10
@@ -87,7 +93,6 @@ class window.Player extends process.EventEmitter
             @current_playing = id
             jQuery('.song').css('background-color': 'transparent')
             jQuery('#' + @current_playing).css('background-color': 'yellow')
-            @player.jPlayer 'setMedia',
-                oga: @audio_files[id].path
-            @player.jPlayer 'play'
+            jQuery(@player).html ''
+            jQuery(@player).append "<source src=\"#{@audio_files[@current_playing].path}\" />"
             return false;

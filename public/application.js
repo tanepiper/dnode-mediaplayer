@@ -35,7 +35,7 @@
       } else {
         return $(document).ready(function() {
           var player;
-          player = new Player('#jquery_jplayer_1', '#player-vis', response);
+          player = new Player('#audio-player', '#player-vis', response);
           return player.init();
         });
       }

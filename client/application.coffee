@@ -28,5 +28,5 @@ app.on 'connected', (remote, connection) ->
             console.log error
         else
             $(document).ready () ->
-                player = new Player '#jquery_jplayer_1', '#player-vis', response
+                player = new Player '#audio-player', '#player-vis', response
                 player.init()

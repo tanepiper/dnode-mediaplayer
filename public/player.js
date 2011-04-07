@@ -15,33 +15,32 @@
       this.current_playing = 0;
       this.image = playlist.image ? playlist.image || null : void 0;
       this.audio_files = playlist.audio_files;
-      this.player = jQuery(player_elem).jPlayer({
-        swfPath: "/jplayer",
-        supplied: "oga",
-        ready: function() {
-          $(this).jPlayer('setMedia', {
-            oga: playlist.audio_files[me.current_playing].path
-          });
-          return jQuery('#' + me.current_playing).css({
-            'background-color': 'yellow'
-          });
-        },
-        ended: function() {
-          me.current_playing++;
-          $(this).jPlayer('setMedia', {
-            oga: playlist.audio_files[me.current_playing].path
-          });
-          jQuery('.song').css({
-            'background-color': 'transparent'
-          });
-          jQuery('#' + me.current_playing).css({
-            'background-color': 'yellow'
-          });
-          return $(this).jPlayer('play');
-        }
-      });
+      this.player = jQuery(player_elem).get()[0];
+      /*
+      @player = jQuery(player_elem).jPlayer
+          swfPath: "/jplayer",
+          supplied: "oga"
+          ready: () ->
+              $(this).jPlayer 'setMedia',
+                  oga: playlist.audio_files[me.current_playing].path
+
+              jQuery('#' + me.current_playing).css('background-color': 'yellow')
+          ended: () ->
+              me.current_playing++
+              $(this).jPlayer 'setMedia',
+                  oga: playlist.audio_files[me.current_playing].path
+              jQuery('.song').css('background-color': 'transparent')
+              jQuery('#' + me.current_playing).css('background-color': 'yellow')
+              $(this).jPlayer 'play'
+
+      */
       this.canvas = jQuery(canvas_elem).get()[0];
       this.c_context = this.canvas.getContext('2d');
+      /*
+      @player.on 'MozAudioAvailable', () ->
+          console.log arguments
+      , false
+      */
     }
     Player.prototype.playerWidget = function() {
       return "<div class=\"jp-audio\">\n    <div class=\"jp-type-single\">\n        <div class=\"jp-interface\">\n            <ul class=\"jp-controls\">\n                <li><a href=\"#\" class=\"jp-play\" tabindex=\"1\">Play</a></li>\n                <li><a href=\"#\" class=\"jp-pause\" tabindex=\"2\">Pause</a></li>\n                <li><a href=\"#\" class=\"jp-stop\" tabindex=\"3\">Stop</a></li>\n                <li><a href=\"#\" class=\"jp-previous\" tabindex=\"4\">Prev</a></li>\n                <li><a href=\"#\" class=\"jp-next\" tabindex=\"5\">Next</a></li>\n                <li><a href=\"#\" class=\"jp-mute\" tabindex=\"6\">Mute</a></li>\n                <li><a href=\"#\" class=\"jp-unmute\" tabindex=\"7\">Unmute</a></li>\n            </ul>\n            <div class=\"jp-progress\">\n                <div class=\"jp-seek-bar\">\n                    <div  class=\"jp-play-bar\"></div>\n                </div>\n            </div>\n    \n            <div class=\"jp-volume-bar\">\n                <div class=\"jp-volume-bar-value\"></div>\n            </div>\n            <div class=\"jp-current-time\"></div>\n            <div class=\"jp-duration\"></div>\n        </div>\n        <div id=\"playlist\" class=\"jp-playlist\">\n            <ul></ul>\n        </div>\n    </div>\n</div>";
@@ -54,10 +53,11 @@
         link = $("<a class=\"song\" id=\"" + file.index + "\" href=\"" + file.path + "\">" + file.name + "</a>");
         this.attachHandler(link);
         item = $('<li></li>').append(link);
-        jQuery('.jp-playlist ul').append(item);
+        jQuery('#playlist ul').append(item);
       }
-      return this.player.jPlayer('setMedia', {
-        oga: this.audio_files[0].path
+      jQuery(this.player).append("<source src=\"" + this.audio_files[this.current_playing].path + "\" />");
+      return jQuery('#' + this.current_playing).css({
+        'background-color': 'yellow'
       });
     };
     Player.prototype.attachHandler = function(link) {
@@ -71,10 +71,8 @@
         jQuery('#' + this.current_playing).css({
           'background-color': 'yellow'
         });
-        this.player.jPlayer('setMedia', {
-          oga: this.audio_files[id].path
-        });
-        this.player.jPlayer('play');
+        jQuery(this.player).html('');
+        jQuery(this.player).append("<source src=\"" + this.audio_files[this.current_playing].path + "\" />");
         return false;
       }, this));
     };

@@ -36,7 +36,7 @@ module.exports = (app, base_path) ->
         #@signup = require('./signup')(app, client, connection)
         
         @getSongs = (callback) ->
-            music_path = path.join base_path, 'music', 'tyrian'
+            music_path = path.join base_path, 'music', 'totala'
             fs.readdir music_path, (error, files) ->
                 if error
                     callback error
