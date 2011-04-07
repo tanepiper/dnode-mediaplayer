@@ -36,20 +36,30 @@ module.exports = (app, base_path) ->
         #@signup = require('./signup')(app, client, connection)
         
         @getSongs = (callback) ->
-            music_path = path.join base_path, 'music', 'totala'
+            music_path = path.join base_path, 'music', 'tyrian'
             fs.readdir music_path, (error, files) ->
                 if error
                     callback error
                 else
-                    audio_files = []
-                    for file in files
-                        
-                        audio = _.extend {},
-                            name: file
-                            path: "/play/#{file}"
-                        audio_files.push audio
-                    #console.log id3s
-                    return callback null, audio_files
+                
+                    output = 
+                        audio_files: []
+                    files.sort()
+                    
+                    index = 0
+                    while files.length
+                        file = files.shift()
+                        is_image = file.indexOf('.jpg')
+                        if is_image > 0
+                            output['image'] = "/show-image/#{file}"
+                        else
+                            audio = _.extend {},
+                                index: index
+                                name: file
+                                path: "/play/#{file}"
+                            output.audio_files.push audio
+                            index = index + 1
+                    return callback null, output
                     
         @settings = 
             application_name: 'DMusic X'

@@ -40,7 +40,7 @@ a img{
 
 h1,h2,h3{
 	font-family:"Myriad Pro","Helvetica Neue",Helvetica,Arial,Sans-Serif;
-	text-shadow:0 1px 1px black;
+	/*text-shadow:0 1px 1px black;*/
 }
 
 h1{
@@ -130,7 +130,7 @@ nav ul li a:visited{
 	font-weight:bold;
 	margin:5px 2px;
 	padding:7px 10px 4px;
-	text-shadow:0 1px 1px white;
+	/*text-shadow:0 1px 1px white;*/
 	text-transform:uppercase;
 }
 
@@ -159,7 +159,7 @@ article{
 	margin:3em 0;
 	padding:20px;
 	
-	text-shadow:0 2px 0 black;
+	/*text-shadow:0 2px 0 black;*/
 }
 
 figure{

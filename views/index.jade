@@ -14,6 +14,9 @@ section(id="page")
 
     section(id="articles")
          article(id="h")
+            div(id="player-image")
+            canvas(id="player-vis")
+            
             div(id="jquery_jplayer_1", class="jp-jplayer")
             div(class="jp-audio")
                 div(class="jp-type-single")
@@ -37,14 +40,15 @@ section(id="page")
                         div( class="jp-volume-bar")
                             div( class="jp-volume-bar-value")
             
-                    div( class="jp-current-time")
-                    div( class="jp-duration")
+                        div( class="jp-current-time")
+                        div( class="jp-duration")
             
-                div( id="jp_playlist_1", class="jp-playlist")
-                    ul
+            div( id="jp_playlist_1", class="jp-playlist")
+                ul
 
 script(type="text/javascript", src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js")
 script(type="text/javascript", src="/jquery.scrollTo-1.4.2/jquery.scrollTo-min.js")
 script(type="text/javascript", src="/theme.js")
 script(type="text/javascript", src="/jplayer/jquery.jplayer.min.js")
 script(type="text/javascript", src="/application.js")
+script(type="text/javascript", src="/player.js")

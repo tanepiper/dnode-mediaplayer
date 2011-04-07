@@ -21,9 +21,8 @@ app.configure ->
 require("#{__dirname}/server/dnode")(app, __dirname)
 
 app.get '/', (req, res, next) ->
-    music_path = path.join __dirname, 'music', 'totala'
+    music_path = path.join __dirname, 'music', 'tyrian'
     fs.readdir music_path, (error, files) ->
-        console.log files
         res.render 'index',
             files: files
             pageTitle: 'Foo Player'
@@ -37,10 +36,20 @@ app.get '/', (req, res, next) ->
         ###
 
 app.get '/play/:file', (req, res, next) ->
-    filePath = path.join __dirname, 'music', 'totala', req.param 'file'
+    filePath = path.join __dirname, 'music', 'tyrian', req.param 'file'
     stat = fs.statSync filePath
     
     res.header 'content-type', 'audio/ogg'
     res.header 'content-length', stat.size
     res.sendfile filePath
+    
+    
+app.get '/show-image/:file', (req, res, next) ->
+    filePath = path.join __dirname, 'music', 'tyrian', req.param 'file'
+    stat = fs.statSync filePath
+    
+    res.header 'content-type', 'audio/ogg'
+    res.header 'content-length', stat.size
+    res.sendfile filePath
+    
 app.listen 9001
