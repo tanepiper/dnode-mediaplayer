@@ -1,5 +1,11 @@
 class window.Player extends process.EventEmitter
-    constructor: (player_elem, canvas_elem, playlist) ->        
+    
+    constructor: (player_elem, canvas_elem, playlist) ->  
+        
+        me = @
+              
+        @current_playing = 0
+        
         @image = if playlist.image then playlist.image or null
         @audio_files = playlist.audio_files
         
@@ -10,7 +16,17 @@ class window.Player extends process.EventEmitter
             supplied: "oga"
             ready: () ->
                 $(this).jPlayer 'setMedia',
-                    oga: playlist.audio_files[0].path
+                    oga: playlist.audio_files[me.current_playing].path
+                    
+                jQuery('#' + me.current_playing).css('background-color': 'yellow')
+            ended: () ->
+                me.current_playing++
+                $(this).jPlayer 'setMedia',
+                    oga: playlist.audio_files[me.current_playing].path
+                jQuery('.song').css('background-color': 'transparent')
+                jQuery('#' + me.current_playing).css('background-color': 'yellow')
+                $(this).jPlayer 'play'
+            
                     
         @canvas = jQuery(canvas_elem).get()[0]
         @c_context = @canvas.getContext '2d'
@@ -54,7 +70,7 @@ class window.Player extends process.EventEmitter
     init: () ->
         #@playerWidget()
         for file in @audio_files
-            link = $("<a id=\"#{file.index}\" href=\"#{file.path}\">#{file.name}</a>")
+            link = $("<a class=\"song\" id=\"#{file.index}\" href=\"#{file.path}\">#{file.name}</a>")
             @attachHandler link
             
             item = $('<li></li>').append link
@@ -68,7 +84,9 @@ class window.Player extends process.EventEmitter
         id = parseInt link.attr('id'), 10
 
         link.click () =>
-            console.log id
+            @current_playing = id
+            jQuery('.song').css('background-color': 'transparent')
+            jQuery('#' + @current_playing).css('background-color': 'yellow')
             @player.jPlayer 'setMedia',
                 oga: @audio_files[id].path
             @player.jPlayer 'play'

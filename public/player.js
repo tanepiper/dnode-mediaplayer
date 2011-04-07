@@ -10,15 +10,34 @@
   window.Player = (function() {
     __extends(Player, process.EventEmitter);
     function Player(player_elem, canvas_elem, playlist) {
+      var me;
+      me = this;
+      this.current_playing = 0;
       this.image = playlist.image ? playlist.image || null : void 0;
       this.audio_files = playlist.audio_files;
       this.player = jQuery(player_elem).jPlayer({
         swfPath: "/jplayer",
         supplied: "oga",
         ready: function() {
-          return $(this).jPlayer('setMedia', {
-            oga: playlist.audio_files[0].path
+          $(this).jPlayer('setMedia', {
+            oga: playlist.audio_files[me.current_playing].path
           });
+          return jQuery('#' + me.current_playing).css({
+            'background-color': 'yellow'
+          });
+        },
+        ended: function() {
+          me.current_playing++;
+          $(this).jPlayer('setMedia', {
+            oga: playlist.audio_files[me.current_playing].path
+          });
+          jQuery('.song').css({
+            'background-color': 'transparent'
+          });
+          jQuery('#' + me.current_playing).css({
+            'background-color': 'yellow'
+          });
+          return $(this).jPlayer('play');
         }
       });
       this.canvas = jQuery(canvas_elem).get()[0];
@@ -32,7 +51,7 @@
       _ref = this.audio_files;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         file = _ref[_i];
-        link = $("<a id=\"" + file.index + "\" href=\"" + file.path + "\">" + file.name + "</a>");
+        link = $("<a class=\"song\" id=\"" + file.index + "\" href=\"" + file.path + "\">" + file.name + "</a>");
         this.attachHandler(link);
         item = $('<li></li>').append(link);
         jQuery('.jp-playlist ul').append(item);
@@ -45,7 +64,13 @@
       var id;
       id = parseInt(link.attr('id'), 10);
       return link.click(__bind(function() {
-        console.log(id);
+        this.current_playing = id;
+        jQuery('.song').css({
+          'background-color': 'transparent'
+        });
+        jQuery('#' + this.current_playing).css({
+          'background-color': 'yellow'
+        });
         this.player.jPlayer('setMedia', {
           oga: this.audio_files[id].path
         });
