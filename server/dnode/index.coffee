@@ -1,6 +1,7 @@
 fs = require 'fs'
 path = require 'path'
 ID3 = require 'id3'
+_ = require 'underscore'
 
 module.exports = (app, base_path) ->
     DNode = require 'dnode'
@@ -35,24 +36,20 @@ module.exports = (app, base_path) ->
         #@signup = require('./signup')(app, client, connection)
         
         @getSongs = (callback) ->
-            music_path = path.join base_path, 'music'
+            music_path = path.join base_path, 'music', 'totala'
             fs.readdir music_path, (error, files) ->
                 if error
                     callback error
                 else
-                    id3s = {}
+                    audio_files = []
                     for file in files
-                        console.log file
-                        handler = fs.readFileSync "#{music_path}/#{file}"
-                        id3 = new ID3 handler
                         
-                        
-                        id3s[file] = {
+                        audio = _.extend {},
+                            name: file
                             path: "/play/#{file}"
-                            id3: id3.getTags()
-                        }
+                        audio_files.push audio
                     #console.log id3s
-                    return callback null, id3s
+                    return callback null, audio_files
                     
         @settings = 
             application_name: 'DMusic X'

@@ -35,11 +35,11 @@
       } else {
         console.log(files);
         return $(document).ready(function() {
-          var file, id, index, link, _results;
+          var file, id, link, _i, _len, _results;
           $("#jquery_jplayer_1").jPlayer({
             ready: function() {
               return $(this).jPlayer("setMedia", {
-                oga: files['01.ogg'].path
+                oga: files[0].path
               }).jPlayer("play");
             },
             ended: function(event) {
@@ -49,14 +49,16 @@
             supplied: "oga"
           });
           _results = [];
-          for (index in files) {
-            file = files[index];
-            id = index.split('.')[0];
-            link = $("<li><a id=\"" + id + "\" href=\"" + file.path + "\">" + index + "</a></li>");
+          for (_i = 0, _len = files.length; _i < _len; _i++) {
+            file = files[_i];
+            id = file.name.split('.')[0];
+            link = $("<li><a id=\"" + id + "\" href=\"" + file.path + "\">" + file.name + "</a></li>");
             $('#jp_playlist_1 ul').append(link);
             _results.push($('#jp_playlist_1 ul li #' + id).click(function() {
+              var oga;
+              oga = $(this).attr('href');
               $("#jquery_jplayer_1").jPlayer("setMedia", {
-                oga: file.path
+                oga: oga
               }).jPlayer('play');
               return false;
             }));

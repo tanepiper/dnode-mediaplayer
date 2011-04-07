@@ -32,18 +32,17 @@ app.on 'connected', (remote, connection) ->
                 $("#jquery_jplayer_1").jPlayer
                     ready: () ->
                         $(this).jPlayer("setMedia",
-                            oga: files['01.ogg'].path
+                            oga: files[0].path
                         ).jPlayer("play");
                     ended: (event) ->
                         $(this).jPlayer "play"
                     swfPath: "/jplayer",
                     supplied: "oga"
-                for index, file of files
-                    id = index.split('.')[0]
-                    link = $("<li><a id=\"#{id}\" href=\"#{file.path}\">#{index}</a></li>")
+                for file in files
+                    id = file.name.split('.')[0]
+                    link = $("<li><a id=\"#{id}\" href=\"#{file.path}\">#{file.name}</a></li>")
                     $('#jp_playlist_1 ul').append link
                     $('#jp_playlist_1 ul li #' + id).click () ->
-                        $("#jquery_jplayer_1").jPlayer("setMedia",
-                            oga: file.path
-                        ).jPlayer 'play'
+                        oga = $(this).attr 'href'
+                        $("#jquery_jplayer_1").jPlayer("setMedia", {oga}).jPlayer 'play'
                         return false
